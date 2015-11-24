@@ -18,7 +18,14 @@ function parseRawData(rawData) {
             // greater than since lines often have more than one colon, eg values with URLS
             if ( lineParts.length >= 2 ) {
                 var keyName = changeCase.camelCase(lineParts[0]);
-                result[keyName] = lineParts.splice(1).join(':').trim();
+                var value = lineParts.splice(1).join(':').trim();
+
+                if(result[keyName] === undefined)
+                    result[keyName] = value;
+                else if(result[keyName] instanceof Array)
+                    result[keyName].push(value);
+                else
+                    result[keyName] = [result[keyName], value];
             }
         }
     });
